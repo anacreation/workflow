@@ -19,5 +19,12 @@
         "psr-4": {
             "Anacreation\\Workflow\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Anacreation\\Workflow\\WorkflowServiceProvider"
+            ]
+        }
     }
 }
