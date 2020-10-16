@@ -4,12 +4,9 @@ namespace Anacreation\Workflow\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Znck\Eloquent\Traits\BelongsToThrough;
 
 class Transition extends Model
 {
-    use BelongsToThrough;
-
     protected $fillable = [
         'label',
         'code',
