@@ -20,7 +20,6 @@ use InvalidArgumentException;
 
 trait HasWorkflow
 {
-
     public function getWorkflow(): ?Workflow {
         $r = DB::table('has_workflow')->where('has_workflow_object',
                                               get_class($this))->first();

@@ -38,4 +38,23 @@ class WorkflowRegistry
         return self::$registry;
     }
 
+    /**
+     * @param string                                  $entityClassName
+     * @param \Anacreation\Workflow\Entities\Workflow $workflow
+     * @return mixed
+     */
+    public static function register(string $entityClassName, Workflow $workflow) {
+        $record = DB::table('has_workflow')->where('has_workflow_object',
+                                                   $entityClassName)
+                    ->where('workflow_id',
+                            $workflow->id)->first();
+
+        if($record === null) {
+            DB::table('has_workflow')->insert([
+                                                  'has_workflow_object' => $entityClassName,
+                                                  'workflow_id'         => $workflow->id,
+                                              ]);
+        }
+    }
+
 }
