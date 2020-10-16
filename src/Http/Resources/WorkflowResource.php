@@ -21,8 +21,14 @@ class WorkflowResource extends JsonResource
             'code'  => $this->code,
         ];
 
-        foreach($this->includes as $include) {
-            $result[$include] = $this->{$include};
+        if(in_array('transitions',
+                    $this->includes)) {
+            $result['transitions'] = TransitionResource::collection($this->transitions);
+        }
+        
+        if(in_array('states',
+                    $this->includes)) {
+            $result['states'] = StateResource::collection($this->states);
         }
 
         return $result;
