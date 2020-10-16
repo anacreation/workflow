@@ -13,9 +13,12 @@
  * @copyright   Copyright (c) A & A Creation (https://anacreation.com/)
  */
 
+use Anacreation\Workflow\Entities\Workflow;
 use Anacreation\Workflow\Http\Api\WorkflowController;
 use Anacreation\Workflow\Http\Api\WorkflowStateController;
 use Anacreation\Workflow\Http\Api\WorkflowTransitionController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -68,6 +71,47 @@ Route::group([
                             WorkflowTransitionController::class."@store");
                 Route::get('/workflows/{workflow}/transitions/{transition}',
                            WorkflowTransitionController::class."@show");
+
+                Route::post('/workflows/{workflow}/entities',
+                    function(Request $request, Workflow $workflow) {
+                        if($entity = $request->get('entity') and
+                           DB::table('has_workflow')
+                             ->where('has_workflow_object',
+                                     $entity)
+                             ->where('workflow_id',
+                                     $workflow->id)
+                             ->first() === null) {
+
+                            DB::table('has_workflow')
+                              ->insert([
+                                           'has_workflow_object' => $entity,
+                                           'workflow_id'         => $workflow->id,
+                                       ]);
+
+                            return response()->json('completed');
+
+                        }
+
+                        return response()->json('failed',
+                                                403);
+
+                    });
+                
+                Route::delete('/workflows/{workflow}/entities/{id}',
+                    function(Workflow $workflow, int $id) {
+                        if($record = DB::table('has_workflow')
+                                       ->where('id',
+                                               $id)
+                                       ->where('workflow_id',
+                                               $workflow->id)
+                                       ->first()) {
+
+                            $record->delete();
+                        }
+
+                        return response()->json('completed');
+
+                    });
 
             });
 
