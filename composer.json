@@ -1,0 +1,24 @@
+{
+    "name": "anacreation/workflow",
+    "description": "Laravel wrapper for Symfony Workflow Component",
+    "type": "lib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Xavier Au",
+            "email": "xavier.au@anacreation.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4",
+        "laravel/framework": "^5.5|^6.0|^7.0|^8.0",
+        "symfony/workflow": "^5.1",
+        "staudenmeir/belongs-to-through": "~2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anacreation\\Workflow\\": "src/"
+        }
+    }
+}
