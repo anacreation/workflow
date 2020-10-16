@@ -96,7 +96,7 @@ Route::group([
                                                 403);
 
                     });
-                
+
                 Route::delete('/workflows/{workflow}/entities/{id}',
                     function(Workflow $workflow, int $id) {
                         if($record = DB::table('has_workflow')

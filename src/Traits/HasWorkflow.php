@@ -63,14 +63,14 @@ trait HasWorkflow
         return $this->currentState->code;
     }
 
-    //    public function setCurrentState($stateCode): void {
-    //        if($workflow = $this->getWorkflow()) {
-    //            $state = $workflow->states()->where('code',
-    //                                                $stateCode)->firstOrFail();
-    //
-    //            $this->currentState()->update(['state_id' => $state->id]);
-    //        }
-    //    }
+    public function setInitialState(): void {
+        if($workflow = $this->getWorkflow()) {
+            $state = $workflow->states()->where('is_initial',
+                                                true)->firstOrFail();
+
+            $this->currentState()->create(['state_id' => $state->id]);
+        }
+    }
 
     public function applyTransition($transition = null): self {
 
