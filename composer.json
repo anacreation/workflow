@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Anacreation\\Workflow\\WorkflowServiceProvider"
+                "OrganizationServiceProvider"
             ]
         }
     }

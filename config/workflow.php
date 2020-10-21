@@ -15,7 +15,7 @@
 
 return [
     'route' => [
-        //        'middleware' => 'auth:sanctum',
-        'prefix' => null,
+        'middleware' => 'null',
+        'prefix'     => null,
     ],
 ];

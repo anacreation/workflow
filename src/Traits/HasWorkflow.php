@@ -12,7 +12,7 @@ use Anacreation\Workflow\Entities\CurrentState;
 use Anacreation\Workflow\Entities\State;
 use Anacreation\Workflow\Entities\Transition;
 use Anacreation\Workflow\Entities\Workflow;
-use Anacreation\Workflow\Services\WorkflowRegistry;
+use EntityApplyTransition;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +40,21 @@ trait HasWorkflow
 
     }
 
+    public function canApplyTransition(Transition $transition): bool {
+
+        if($workflow = $this->getWorkflow()) {
+            return $workflow->transitions()
+                            ->where('from_state_id',
+                                    $this->currentState->id)
+                            ->where('to_state_id',
+                                    $transition->to_state_id)
+                            ->exists();
+        }
+
+        return false;
+
+    }
+
     public function getAllTransitions(): Collection {
         if($workflow = $this->getWorkflow()) {
             return $workflow->transitions;
@@ -49,7 +64,7 @@ trait HasWorkflow
 
     }
 
-    protected function currentState(): MorphOne {
+    public function currentState(): MorphOne {
         return $this->morphOne(CurrentState::class,
                                'object');
     }
@@ -78,10 +93,8 @@ trait HasWorkflow
         }
 
         if($transition instanceof Transition) {
-            $registry = WorkflowRegistry::getRegistry();
-            $workflow = $registry->get($this);
-            $workflow->apply($this,
-                             $transition->code);
+            EntityApplyTransition::apply($this,
+                                         $transition);
 
             return $this;
         }
