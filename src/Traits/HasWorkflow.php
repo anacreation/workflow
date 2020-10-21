@@ -9,6 +9,7 @@ namespace Anacreation\Workflow\Traits;
 
 
 use Anacreation\Workflow\Actions\EntityApplyTransition;
+use Anacreation\Workflow\Actions\SetInitialState;
 use Anacreation\Workflow\Entities\CurrentState;
 use Anacreation\Workflow\Entities\State;
 use Anacreation\Workflow\Entities\Transition;
@@ -69,6 +70,7 @@ trait HasWorkflow
                                'object');
     }
 
+
     public function getCurrentStateAttribute(): State {
         return $this->currentState()->first()->state;
     }
@@ -78,11 +80,15 @@ trait HasWorkflow
     }
 
     public function setInitialState(): void {
-        if($workflow = $this->getWorkflow()) {
-            $state = $workflow->states()->where('is_initial',
-                                                true)->firstOrFail();
+        SetInitialState::execute($this);
+    }
 
-            $this->currentState()->create(['state_id' => $state->id]);
+    public function setCurrentState(string $stateCode): void {
+        if($workflow = $this->getWorkflow()) {
+            $state = $workflow->states()->where('code',
+                                                $stateCode)->firstOrFail();
+
+            $this->currentState()->update(['state_id' => $state->id]);
         }
     }
 

@@ -3,12 +3,10 @@
 namespace Anacreation\Workflow\Actions;
 
 use Anacreation\Workflow\Contracts\HasWorkflowInterface;
-use Anacreation\Workflow\Entities\Transition;
+use Anacreation\Workflow\Entities\State;
 use Anacreation\Workflow\Entities\TransitionRecord;
-use Anacreation\Workflow\Events\BeforeTransitionApplied;
-use Anacreation\Workflow\Events\TransitionApplied;
-use Anacreation\Workflow\Services\WorkflowRegistry;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 /**
  * A & A Creation Co.
@@ -23,38 +21,34 @@ use Illuminate\Support\Facades\DB;
  * @Date        : 21/10/2020
  * @copyright   Copyright (c) A & A Creation (https://anacreation.com/)
  */
-class EntityApplyTransition
+class SetInitialState
 {
-    public static function apply(HasWorkflowInterface $entity, Transition $transition): void {
+    public static function execute(HasWorkflowInterface $entity): State {
+        $workflow = $entity->getWorkflow();
 
-        event(new BeforeTransitionApplied($entity,
-                                          $transition));
+        if($workflow === null) {
+            throw new InvalidArgumentException("Entity doesn't has a workflow attached.");
+        }
 
-        $registry = WorkflowRegistry::getRegistry();
-        $workflow = $registry->get($entity);
-
+        $state = $workflow->states()->where('is_initial',
+                                            true)->firstOrFail();
         DB::beginTransaction();
 
         try {
 
-            $workflow->apply($entity,
-                             $transition->code);
+            $entity->currentState()->create(['state_id' => $state->id]);
             TransitionRecord::create([
                                          'causer_type'   => get_class(auth()->user()),
                                          'causer_id'     => auth()->id(),
                                          'entity_type'   => get_class($entity),
                                          'entity_id'     => $entity->id,
-                                         'transition_id' => $transition->id,
+                                         'transition_id' => null,
                                      ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
-
-
-        event(new TransitionApplied($entity,
-                                    $transition));
 
     }
 }
