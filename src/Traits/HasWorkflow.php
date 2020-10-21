@@ -8,11 +8,11 @@
 namespace Anacreation\Workflow\Traits;
 
 
+use Anacreation\Workflow\Actions\EntityApplyTransition;
 use Anacreation\Workflow\Entities\CurrentState;
 use Anacreation\Workflow\Entities\State;
 use Anacreation\Workflow\Entities\Transition;
 use Anacreation\Workflow\Entities\Workflow;
-use EntityApplyTransition;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

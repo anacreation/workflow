@@ -1,5 +1,7 @@
 <?php
 
+namespace Anacreation\Workflow\Actions;
+
 use Anacreation\Workflow\Contracts\HasWorkflowInterface;
 use Anacreation\Workflow\Entities\Transition;
 use Anacreation\Workflow\Services\WorkflowRegistry;
