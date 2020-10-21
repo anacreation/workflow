@@ -1,6 +1,6 @@
 <?php
 
-namespace Anacreation\WorkflowEvents;
+namespace Anacreation\Workflow\Events;
 
 use Anacreation\Workflow\Entities\Transition;
 use Illuminate\Broadcasting\InteractsWithSockets;
