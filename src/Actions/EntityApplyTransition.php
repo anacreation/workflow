@@ -4,9 +4,9 @@ namespace Anacreation\Workflow\Actions;
 
 use Anacreation\Workflow\Contracts\HasWorkflowInterface;
 use Anacreation\Workflow\Entities\Transition;
+use Anacreation\Workflow\Events\BeforeTransitionApplied;
+use Anacreation\Workflow\Events\TransitionApplied;
 use Anacreation\Workflow\Services\WorkflowRegistry;
-use Anacreation\WorkflowEvents\BeforeTransitionApplied;
-use Anacreation\WorkflowEvents\TransitionApplied;
 
 /**
  * A & A Creation Co.
