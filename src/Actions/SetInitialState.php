@@ -30,6 +30,7 @@ class SetInitialState
             throw new InvalidArgumentException("Entity doesn't has a workflow attached.");
         }
 
+        /** @var State $state */
         $state = $workflow->states()->where('is_initial',
                                             true)->firstOrFail();
         DB::beginTransaction();
@@ -49,6 +50,8 @@ class SetInitialState
             DB::rollBack();
             throw $e;
         }
+
+        return $state;
 
     }
 }
