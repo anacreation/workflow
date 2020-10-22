@@ -15,7 +15,7 @@
 
 return [
     'route' => [
-        'middleware' => 'null',
+        'middleware' => null,
         'prefix'     => null,
     ],
 ];
