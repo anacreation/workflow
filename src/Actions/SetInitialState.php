@@ -39,7 +39,8 @@ class SetInitialState
 
             $entity->currentState()->create(['state_id' => $state->id]);
             TransitionRecord::create([
-                                         'causer_type'   => get_class(auth()->user()),
+                                         'causer_type'   => ($user = auth()->user()) ?
+                                             get_class($user): null,
                                          'causer_id'     => auth()->id(),
                                          'entity_type'   => get_class($entity),
                                          'entity_id'     => $entity->id,
